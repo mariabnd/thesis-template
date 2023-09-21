@@ -1,0 +1,457 @@
+\documentclass[paper = a4, fontsize = 12pt, numbers = noenddot, DIV = 15, twoside, 
+paper = portrait,
+%pagesize = auto,
+%headings = twolinechapter,
+listof = totoc,
+listof = chapterentry,
+egregdoesnotlikesansseriftitles, %remove any kind of sans serif
+parskip = half % Gives spaces between paragraphs rather than indents
+]{scrbook}
+
+\makeatletter
+\@openrighttrue % gives an error but forces the staple to be in the right position so Iunno...
+\makeatother
+
+% Typesetting and layout
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[british]{babel}
+\usepackage[UKenglish]{datetime}
+\let\dateUKenglish\relax
+\newdateformat{dateUKenglish}{\ordinaldate{\THEDAY}~\monthname[\THEMONTH] \THEYEAR}
+
+\defcaptionname{english}{\refname}{References}
+
+% Bibliography
+\usepackage[round, numbers, sort&compress]{natbib}
+\bibliographystyle{chicagolinks} % For annotation option
+
+% Change look of numbering in bibliography
+% Source https://tex.stackexchange.com/a/327971
+\makeatletter
+\renewcommand{\@biblabel}[1]{#1}
+\makeatother
+
+\usepackage{xcolor}
+
+\colorlet{grey}{gray} % Added to avoid error messages
+
+\definecolor{vrds1}{HTML}{3b528b}
+\definecolor{vrds2}{HTML}{21918c}
+\definecolor{vrds3}{HTML}{5ec962}
+
+\usepackage{setspace}
+
+% Referencing
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\exmref}[1]{Example~\ref{#1}}
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\infref}[1]{Infobox~\ref{#1}}
+
+\def\indep{\perp\!\!\!\perp}
+
+% Fonts
+\usepackage{stix}
+\addtokomafont{disposition}{\rmfamily} % Make headings serif rather than sans serif
+
+\usepackage{boxedminipage}
+
+\DeclareNewTOC[
+type = infobox,
+types = infoxboxes,
+float,
+name = Infobox,
+counterwithin=chapter,
+listname = {List of Infoboxes},
+atbegin=\boxedminipage{\textwidth},
+atend=\endboxedminipage
+]{inf}
+
+\RedeclareSectionCommand[style = section, indent = 0pt, beforeskip = -2 \baselineskip]{chapter}
+\setkomafont{chapter}{\normalfont\Large\scshape}
+\addtokomafont{section}{\large\normalfont\scshape\centering}
+\addtokomafont{subsection}{\centering\normalfont}
+\renewcommand*{\raggedchapter}{\centering}
+
+% Adapting https://tex.stackexchange.com/a/421833
+% for our use
+\usepackage{varwidth}
+\makeatletter
+\renewcommand\sectionlinesformat[4]{%
+	\Ifstr{#1}{chapter}
+	{%
+		\raggedchapter
+		\begin{varwidth}{\dimexpr\textwidth-6em\relax}
+			\raggedchapter#3#4%
+		\end{varwidth}%
+		\par\nobreak
+		\strut\rule{2em}{1pt}%
+		\par
+	}
+	{\@hangfrom{\hskip#2#3}{#4}}% original definition for other section levels
+}
+\makeatother
+
+\usepackage{booktabs}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns, calc, trees}
+\usetikzlibrary{tikzmark} % Avoids savepicturepage error
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+
+\newcommand{\highlight}[2]{\colorbox{#1!17}{$\displaystyle #2$}}
+
+\usepackage{pgfplots} % For predictions (projections vs forecasting) plot
+
+\usepackage{anyfontsize}
+
+% For drop caps
+\usepackage{lettrine}
+
+\newcommand{\ignore}[1]{}
+\usepackage[color = blue!40]{todonotes}
+
+% Include only chapter names in header
+\renewcommand{\rightmark}[1]{\leftmark{#1}{}}
+
+% Remove space before verbatim (source: https://tex.stackexchange.com/a/43336)
+\usepackage{etoolbox}
+\makeatletter
+\preto{\@verbatim}{\topsep=0pt \partopsep=0pt }
+\makeatother
+
+\usepackage{amsmath}
+
+\usepackage[acronym, nopostdot, nonumberlist, toc]{glossaries}
+%\usepackage{glossaries-extra} %do not add this back it fucks up the abbreviations
+
+\glossarystyle{altlist}
+%\renewcommand*{\glossaryname}{Key definitions}
+
+\makeglossaries
+
+\input{glossaries}
+
+\usepackage{ragged2e}
+
+\usepackage{imakeidx}
+\makeindex[columns = 2]
+
+\setlength{\intextsep}{5pt} % Vertical padding around floats
+%\setlength{\belowcaptionskip}{-\baselineskip}
+\addtolength{\belowcaptionskip}{1.6ex}%
+
+\usepackage{xfrac}
+
+\usepackage{dsfont}
+
+\setcounter{tocdepth}{0} % Just chapter headings
+
+%\usepackage[arrows]{boisik} %For \drsh
+\newcommand{\drsh}{\hookrightarrow}
+
+\usepackage{enumitem} % For spacing in description environment (for timeline)
+
+\usepackage[hyphens]{url}
+\usepackage{doi}
+\renewcommand*{\doi}[1]{DOI \texttt{\href{http://doi.org/#1}{#1}}}
+\usepackage{hyperref}
+\hypersetup{breaklinks = true}
+\hypersetup{colorlinks = true, % Get rid of the ugly boxes
+	linkcolor = {black},
+	citecolor = {black},
+	urlcolor = {blue!80!black}
+}
+
+\usepackage{multirow} % For "parallel developments" in overview table
+
+\newlength{\defaultskip}
+\setlength{\defaultskip}{\footskip}
+
+\usepackage{pdfpages}
+
+\begin{document}
+
+\onehalfspacing
+%\singlespacing
+
+\frontmatter
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{tikzpicture}[overlay, remember picture]
+		\begin{scope}[transform canvas = {rotate around = {45:($(current page.north west) + (13,-10)$)}}, ]
+
+				\shade[left color = grey!40!blue, right color = grey] ($(current page.north west)$) rectangle ++ ($(current page.south east) + (10, -10)$);
+
+		\end{scope}
+
+		\node[text width = \textwidth, align = center] at ($(current page.center) + (0, 3)$) {{\fontsize{20}{24}\fontfamily{qag} \selectfont \color{white} Title of your choice}};
+
+		\node at ($(current page.south west) + (4, 2)$) {(ADD LOGO using \verb+includegraphics+)};
+
+	\end{tikzpicture}
+\end{titlepage}
+
+\RaggedRight
+\setlength{\RaggedRightParindent}{\parindent}
+
+\thispagestyle{empty}
+~\\
+\vfill
+\noindent This PhD thesis was typeset in XeLaTeX. The font used is from the Scientific and Technical Information Exchange fonts family. Text is left-aligned for improved readability. Text and figures are licensed under Creative Commons Attribution CC BY 4.0 (CC BY). Figures reused or adapted from other sources do not fall under this license and can be recognised by a note of attribution in their caption. Papers showcased do also not fall under this license and must be attributed according to publishers' requirements. Use of data sources listed is not an endorsement of the data provider.~\\
+~\\
+\noindent
+%Citation
+For attribution, please cite this work as~\\
+\emph{Author (Year). Title of your choice.}
+%~\\
+%\noindent
+%BibTeX citation
+\begin{verbatim}
+	@misc{...,
+		author = {Author},
+		title = {{Title of your choice}},
+		year = {Year}
+	}
+\end{verbatim}
+
+\clearpage
+
+\glsaddall %Add all definitions to the glossary
+
+\chapter*{Summary}
+\addcontentsline{toc}{chapter}{Summary}
+\markboth{Summary}{}
+
+Lorem ipsum\index{ipsum}\index{lorem|see {ipsum}} dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu scelerisque felis imperdiet proin fermentum leo. Ullamcorper sit amet risus nullam eget felis eget nunc. Mauris in aliquam sem fringilla. In aliquam sem fringilla ut morbi tincidunt augue. Convallis convallis tellus id interdum velit laoreet. Consectetur adipiscing elit pellentesque habitant morbi tristique senectus. Volutpat lacus laoreet non curabitur gravida arcu ac tortor. Et magnis dis parturient montes nascetur ridiculus mus. Tortor at auctor urna nunc id cursus metus. Sodales ut etiam sit amet nisl purus in mollis nunc. Amet porttitor eget dolor morbi non. At volutpat diam ut venenatis tellus in metus. Sodales ut etiam sit amet nisl purus in mollis nunc.
+
+Id eu nisl nunc mi ipsum\index{ipsum}. Maecenas ultricies mi eget mauris pharetra et ultrices neque. Volutpat est velit egestas dui. Tempus iaculis urna id volutpat. Libero nunc consequat interdum varius sit. Commodo nulla facilisi nullam vehicula ipsum\index{ipsum} a arcu cursus. Purus in mollis nunc sed id semper risus. Ac placerat vestibulum lectus mauris. Et odio pellentesque diam volutpat commodo sed egestas egestas fringilla. Justo donec enim diam vulputate ut pharetra sit amet aliquam. Commodo viverra maecenas accumsan lacus.
+
+Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus. Justo nec ultrices dui sapien. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. Enim sit amet venenatis urna cursus eget. At varius vel pharetra vel turpis. Facilisis volutpat est velit egestas dui id ornare. Cras pulvinar mattis nunc sed blandit libero volutpat. Id aliquet lectus proin nibh nisl condimentum id venenatis. Lectus quam id leo in vitae turpis massa sed. Interdum posuere lorem ipsum\index{ipsum} dolor sit amet. Pharetra diam sit amet nisl suscipit.
+
+\clearpage
+
+\tableofcontents
+
+%\printglossary[type = \acronymtype]
+%\printglossary
+\printglossaries%[title = {Key definitions}]
+
+\clearpage
+
+\setcounter{tocdepth}{1} % Include lower levels in lists of figures and tables
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\listoftoc{inf}
+\clearpage
+
+\chapter*{List of Papers}
+\addcontentsline{toc}{chapter}{List of Papers}
+\markboth{List of Papers}{}
+
+Malesuada proin libero nunc consequat interdum varius sit. Tellus integer feugiat scelerisque varius morbi enim nunc faucibus a. Magnis dis parturient montes nascetur ridiculus mus. Mauris pharetra et ultrices neque ornare. Enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra. Cursus in hac habitasse platea dictumst quisque. Ut placerat orci nulla pellentesque dignissim. Porttitor leo a diam sollicitudin. Orci porta non pulvinar neque laoreet suspendisse interdum. Posuere sollicitudin aliquam ultrices sagittis. Orci nulla pellentesque dignissim enim sit amet venenatis urna cursus. Diam quis enim lobortis scelerisque fermentum dui faucibus. Etiam erat velit scelerisque in dictum non consectetur a erat. Lacus sed viverra tellus in hac. Molestie a iaculis at erat pellentesque adipiscing commodo elit at. Porta non pulvinar neque laoreet suspendisse interdum consectetur libero.
+
+\begin{center}
+	$\ast$~$\ast$~$\ast$
+\end{center}
+
+Aenean pharetra magna ac placerat vestibulum lectus mauris. Congue quisque egestas diam in arcu cursus euismod quis viverra. Nulla malesuada pellentesque elit eget gravida cum sociis natoque. Urna cursus eget nunc scelerisque viverra mauris in aliquam sem. Lorem ipsum\index{ipsum} dolor sit amet consectetur adipiscing elit duis tristique. Eu feugiat pretium nibh ipsum\index{ipsum}. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam erat. Suspendisse interdum consectetur libero id faucibus. Aliquam vestibulum morbi blandit cursus risus. Pellentesque habitant morbi tristique senectus. Libero justo laoreet sit amet. Aliquet porttitor lacus luctus accumsan. Elementum nisi quis eleifend quam adipiscing vitae proin. Id neque aliquam vestibulum morbi blandit. Ante metus dictum at tempor commodo ullamcorper a lacus. Ultrices neque ornare aenean euismod elementum nisi quis eleifend quam. Ac tortor dignissim convallis aenean et. In eu mi bibendum neque egestas congue quisque egestas. Eget mauris pharetra et ultrices neque. Justo donec enim diam vulputate ut pharetra sit.
+
+\clearpage
+
+\mainmatter
+
+\clearpage
+\chapter{Introduction}
+
+\lettrine{L}{ectus} Lectus urna duis convallis convallis tellus id interdum velit laoreet. Risus ultricies tristique nulla aliquet enim tortor. Fames ac turpis egestas maecenas. Faucibus pulvinar elementum integer enim neque volutpat ac tincidunt vitae. Diam quis enim lobortis scelerisque fermentum. Arcu vitae elementum curabitur vitae nunc sed velit dignissim. Nulla at volutpat diam ut venenatis tellus. Condimentum id venenatis a condimentum vitae sapien. Eu nisl nunc mi ipsum\index{ipsum} faucibus vitae. Id nibh tortor id aliquet. Cras pulvinar mattis nunc sed blandit. Nisi quis eleifend quam adipiscing vitae proin sagittis nisl rhoncus. Semper eget duis at tellus at urna. Ultrices gravida dictum fusce ut placerat orci. Turpis cursus in hac habitasse platea dictumst quisque sagittis purus.
+
+Pretium fusce id velit ut. Sit amet cursus sit amet dictum sit. Orci ac auctor augue mauris augue neque gravida. Magna ac placerat vestibulum lectus. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Ut tortor pretium viverra suspendisse potenti nullam ac tortor. Faucibus pulvinar elementum integer enim. Semper viverra nam libero justo laoreet sit amet. Ante in nibh mauris cursus mattis molestie. Proin sed libero enim sed. Duis tristique sollicitudin nibh sit. A iaculis at erat pellentesque adipiscing commodo elit at. Malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Adipiscing elit ut aliquam purus sit. Eleifend donec pretium vulputate sapien nec sagittis. Enim nec dui nunc mattis enim. Velit aliquet sagittis id consectetur purus ut.
+
+Eu facilisis sed odio morbi quis commodo. Proin fermentum leo vel orci. Et netus et malesuada fames ac turpis egestas sed. At elementum eu facilisis sed odio morbi quis. Enim nunc faucibus a pellentesque sit amet porttitor. Pellentesque habitant morbi tristique senectus. Viverra aliquet eget sit amet tellus cras adipiscing enim. In hac habitasse platea dictumst quisque. Arcu dictum varius duis at consectetur lorem donec massa sapien. Non sodales neque sodales ut etiam sit amet nisl. Est ante in nibh mauris cursus mattis molestie.
+
+\begin{figure}[!htb]
+	\begin{center}
+		\begin{tikzpicture}[node distance=3cm]
+			% nodes
+			\node (left) at (11, 2) {Left};
+			\node (right) at (15, 2) {Right};
+			% arrows
+			\draw[->] (left) -- (right);
+		\end{tikzpicture}
+	\end{center}
+	\caption[Figure short title]{Figure longer title with more explanation of what is shown}
+	\label{fig:illustration}
+\end{figure}
+
+\figref{fig:illustration} illustrates that \gls{AMR} is an issue. The next instance is shortened as \gls{AMR} but can be brought back in full as \glsfirst{AMR}, which can be useful if starting a new chapter. 
+
+\clearpage
+\chapter{Model}
+
+\lettrine{I}{psum}\index{ipsum} nunc aliquet bibendum enim facilisis gravida neque convallis. Mi in nulla posuere sollicitudin aliquam ultrices. Vulputate mi sit amet mauris. Pharetra magna ac placerat vestibulum. Enim praesent elementum facilisis leo vel fringilla est ullamcorper. Id nibh tortor id aliquet lectus. Amet consectetur adipiscing elit duis tristique sollicitudin nibh. Vulputate eu scelerisque felis imperdiet proin fermentum. Sed felis eget velit aliquet sagittis id consectetur purus. Dolor sed viverra ipsum\index{ipsum} nunc aliquet bibendum enim facilisis gravida. Vitae tortor condimentum lacinia quis vel eros. Lorem sed risus ultricies tristique nulla aliquet. Sagittis orci a scelerisque purus. Massa tincidunt dui ut ornare lectus sit amet est.
+
+Sit amet est placerat in egestas erat imperdiet. Sodales ut eu sem integer vitae justo eget magna fermentum. Ut tellus elementum sagittis vitae et leo duis ut. Mauris cursus mattis molestie a iaculis at erat. Volutpat lacus laoreet non curabitur gravida arcu ac tortor. Leo duis ut diam quam nulla porttitor massa id. Sodales ut etiam sit amet nisl purus in mollis. Quis ipsum\index{ipsum} suspendisse ultrices gravida dictum fusce. Nulla facilisi cras fermentum odio eu feugiat. Aliquam vestibulum morbi blandit cursus. Semper auctor neque vitae tempus quam pellentesque nec nam aliquam. Ultrices in iaculis nunc sed augue. Tellus in hac habitasse platea. Diam phasellus vestibulum lorem sed risus ultricies tristique nulla. Sit amet dictum sit amet justo donec enim. Sagittis vitae et leo duis ut diam quam nulla. Gravida in fermentum et sollicitudin ac orci. Proin sagittis nisl rhoncus mattis rhoncus urna neque.
+
+In nisl nisi scelerisque eu ultrices vitae. Mauris nunc congue nisi vitae. Fames ac turpis egestas integer eget aliquet. Facilisis mauris sit amet massa vitae tortor condimentum lacinia quis. Quam vulputate dignissim suspendisse in est ante in nibh mauris. Accumsan lacus vel facilisis volutpat est velit egestas dui id. Volutpat lacus laoreet non curabitur gravida arcu ac. Metus vulputate eu scelerisque felis imperdiet proin fermentum. Dignissim cras tincidunt lobortis feugiat vivamus at augue eget. Sollicitudin tempor id eu nisl nunc mi. Leo duis ut diam quam nulla porttitor massa id neque.
+
+Egestas dui id ornare arcu odio ut sem nulla pharetra. Tristique senectus et netus et malesuada fames. Id diam vel quam elementum pulvinar etiam. Ut lectus arcu bibendum at varius vel pharetra. Nisl condimentum id venenatis a condimentum vitae. Porta lorem mollis aliquam ut porttitor leo a diam sollicitudin. Amet luctus venenatis lectus magna fringilla urna. Aliquam malesuada bibendum arcu vitae. Tincidunt praesent semper feugiat nibh sed. Ut lectus arcu bibendum at varius vel. In ornare quam viverra orci. Sapien eget mi proin sed libero enim sed. Id aliquet risus feugiat in. Sit amet commodo nulla facilisi nullam vehicula ipsum\index{ipsum}. Odio pellentesque diam volutpat commodo sed egestas egestas. Varius sit amet mattis vulputate enim nulla aliquet porttitor lacus.
+
+Suscipit tellus mauris a diam maecenas. Fermentum iaculis eu non diam phasellus vestibulum lorem sed. Faucibus nisl tincidunt eget nullam non nisi est. Tortor aliquam nulla facilisi cras fermentum odio eu. Mauris a diam maecenas sed enim. Diam ut venenatis tellus in metus vulputate. Mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Augue lacus viverra vitae congue eu consequat. Egestas purus viverra accumsan in. Etiam non quam lacus suspendisse faucibus interdum posuere. Eu tincidunt tortor aliquam nulla. Id consectetur purus ut faucibus pulvinar elementum integer enim neque. Lacus sed viverra tellus in hac habitasse platea. Aliquam purus sit amet luctus venenatis lectus magna. Nulla aliquet porttitor lacus luctus accumsan tortor posuere ac. Purus faucibus ornare suspendisse sed nisi lacus sed viverra. Enim sed faucibus turpis in eu.
+
+Sed odio morbi quis commodo. Faucibus a pellentesque sit amet. Arcu bibendum at varius vel pharetra vel turpis nunc. Condimentum vitae sapien pellentesque habitant morbi tristique senectus et. Id diam maecenas ultricies mi eget mauris pharetra et ultrices. Purus semper eget duis at. Tempus quam pellentesque nec nam aliquam sem et tortor. Et pharetra pharetra massa massa ultricies. A diam sollicitudin tempor id eu nisl nunc mi. Id nibh tortor id aliquet lectus proin nibh. Orci nulla pellentesque dignissim enim sit amet venenatis urna. Nulla posuere sollicitudin aliquam ultrices sagittis orci.
+
+Condimentum id venenatis a condimentum vitae sapien. Tempus egestas sed sed risus pretium quam vulputate dignissim. Mollis aliquam ut porttitor leo a diam sollicitudin. Nulla porttitor massa id neque. Est velit egestas dui id ornare. Accumsan in nisl nisi scelerisque eu. Dui faucibus in ornare quam viverra orci sagittis eu volutpat. Et ligula ullamcorper malesuada proin libero nunc consequat interdum. Porttitor leo a diam sollicitudin tempor id. Eget duis at tellus at urna condimentum mattis. Morbi enim nunc faucibus a pellentesque sit amet. Risus feugiat in ante metus dictum at. Vitae turpis massa sed elementum tempus egestas sed sed. Vitae turpis massa sed elementum tempus egestas sed sed. Nulla malesuada pellentesque elit eget gravida. Elementum eu facilisis sed odio morbi quis commodo odio aenean. Aliquam ultrices sagittis orci a scelerisque. Gravida in fermentum et sollicitudin ac orci phasellus egestas. Aliquam etiam erat velit scelerisque in dictum non. Amet nisl purus in mollis nunc sed.
+
+\section{Section}
+
+Nulla at volutpat diam ut venenatis. Malesuada pellentesque elit eget gravida cum. At erat pellentesque adipiscing commodo elit. Egestas pretium aenean pharetra magna ac placerat vestibulum lectus. Erat pellentesque adipiscing commodo elit at. Lacinia at quis risus sed vulputate odio ut enim blandit. Nisl suscipit adipiscing bibendum est ultricies. Odio euismod lacinia at quis risus. Diam in arcu cursus euismod quis. Et magnis dis parturient montes nascetur ridiculus mus mauris. Massa tincidunt dui ut ornare lectus. Pharetra magna ac placerat vestibulum lectus mauris. Pretium lectus quam id leo in vitae turpis massa sed. Egestas tellus rutrum tellus pellentesque eu. Tempus egestas sed sed risus pretium quam vulputate dignissim. Etiam non quam lacus suspendisse faucibus interdum posuere. Viverra orci sagittis eu volutpat odio facilisis mauris.
+
+Et egestas quis ipsum\index{ipsum} suspendisse. Eget magna fermentum iaculis eu non diam phasellus vestibulum. Amet dictum sit amet justo donec enim diam vulputate. Magna etiam tempor orci eu lobortis elementum nibh tellus molestie. Velit laoreet id donec ultrices. Enim blandit volutpat maecenas volutpat blandit aliquam etiam erat. Magna fringilla urna porttitor rhoncus dolor purus non. Euismod elementum nisi quis eleifend quam adipiscing vitae proin sagittis. Sit amet commodo nulla facilisi nullam vehicula ipsum\index{ipsum}. Et egestas quis ipsum\index{ipsum} suspendisse ultrices gravida dictum fusce. Consequat id porta nibh venenatis cras sed felis eget velit. Senectus et netus et malesuada fames ac turpis.
+
+Sapien et ligula ullamcorper malesuada. Montes nascetur ridiculus mus mauris vitae ultricies leo integer malesuada. Tortor at risus viverra adipiscing. Interdum velit laoreet id donec ultrices tincidunt arcu non. Nisl vel pretium lectus quam. Aliquet bibendum enim facilisis gravida neque convallis. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Nulla porttitor massa id neque aliquam vestibulum morbi blandit cursus. Enim nec dui nunc mattis enim. Ac ut consequat semper viverra nam. Ultrices vitae auctor eu augue ut lectus arcu bibendum. At ultrices mi tempus imperdiet nulla. Quis varius quam quisque id. Mauris nunc congue nisi vitae suscipit tellus mauris a diam. Scelerisque eleifend donec pretium vulputate sapien. Velit egestas dui id ornare arcu.
+
+Sed enim ut sem viverra aliquet eget sit. Volutpat blandit aliquam etiam erat velit scelerisque in. Tempus quam pellentesque nec nam aliquam sem et. Malesuada fames ac turpis egestas maecenas pharetra. Massa sapien faucibus et molestie ac feugiat. Tellus pellentesque eu tincidunt tortor aliquam. Mauris rhoncus aenean vel elit scelerisque. Vitae et leo duis ut. Arcu bibendum at varius vel pharetra. Morbi tristique senectus et netus et malesuada. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Ac placerat vestibulum lectus mauris ultrices eros in. Aenean euismod elementum nisi quis eleifend quam adipiscing. Fames ac turpis egestas integer eget aliquet nibh praesent tristique. Quis risus sed vulputate odio ut. Risus quis varius quam quisque id diam. Semper viverra nam libero justo laoreet sit amet. Velit euismod in pellentesque massa.
+
+\section{Section}
+
+Risus nullam eget felis eget nunc. Volutpat blandit aliquam etiam erat velit scelerisque in dictum non. Interdum velit laoreet id donec ultrices tincidunt arcu non. Urna duis convallis convallis tellus id interdum. Condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi. Convallis tellus id interdum velit laoreet. Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Non nisi est sit amet facilisis magna. Aliquet risus feugiat in ante metus dictum at. Accumsan in nisl nisi scelerisque eu. Dignissim convallis aenean et tortor at risus viverra adipiscing at. Malesuada fames ac turpis egestas sed tempus urna et pharetra. Sed turpis tincidunt id aliquet risus feugiat.
+
+Rhoncus aenean vel elit scelerisque. Bibendum ut tristique et egestas quis ipsum\index{ipsum} suspendisse ultrices gravida. Eu tincidunt tortor aliquam nulla. Nunc non blandit massa enim nec dui nunc. Elementum nisi quis eleifend quam. Viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor. Cursus turpis massa tincidunt dui. Posuere sollicitudin aliquam ultrices sagittis orci a scelerisque. Fermentum iaculis eu non diam phasellus vestibulum lorem sed risus. Suspendisse interdum consectetur libero id faucibus nisl tincidunt eget nullam.
+
+Arcu felis bibendum ut tristique et egestas. Felis eget nunc lobortis mattis aliquam faucibus. Proin sed libero enim sed faucibus turpis in eu mi. Ultrices gravida dictum fusce ut. Accumsan sit amet nulla facilisi morbi tempus iaculis urna id. Quam pellentesque nec nam aliquam sem et tortor consequat id. Tortor at risus viverra adipiscing at in tellus integer feugiat. Sem nulla pharetra diam sit. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Sed elementum tempus egestas sed sed risus pretium. Mi ipsum\index{ipsum} faucibus vitae aliquet. Enim blandit volutpat maecenas volutpat blandit aliquam.
+
+\subsection{Subsection}
+
+Viverra justo nec ultrices dui sapien eget. Rhoncus urna neque viverra justo nec ultrices dui. Metus dictum at tempor commodo ullamcorper a lacus. Congue nisi vitae suscipit tellus. Ut morbi tincidunt augue interdum velit. Est ante in nibh mauris cursus mattis molestie a iaculis. Turpis in eu mi bibendum neque egestas congue. Tempor orci eu lobortis elementum nibh tellus molestie nunc non. Diam vulputate ut pharetra sit amet aliquam id. Ullamcorper morbi tincidunt ornare massa eget egestas purus. Lectus proin nibh nisl condimentum id. Ultrices in iaculis nunc sed augue lacus. Neque egestas congue quisque egestas diam in. Consequat id porta nibh venenatis cras sed felis eget velit. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. At risus viverra adipiscing at. Nam aliquam sem et tortor consequat id porta. Nulla pharetra diam sit amet. Duis at tellus at urna condimentum. Habitasse platea dictumst vestibulum rhoncus est pellentesque elit.
+
+Commodo viverra maecenas accumsan lacus vel facilisis volutpat est. Pellentesque sit amet porttitor eget dolor morbi non. Lorem mollis aliquam ut porttitor leo. Suspendisse interdum consectetur libero id faucibus nisl tincidunt. Et tortor consequat id porta nibh venenatis. Nunc id cursus metus aliquam eleifend mi in nulla posuere. Viverra maecenas accumsan lacus vel facilisis. Ultrices tincidunt arcu non sodales neque sodales ut. Morbi leo urna molestie at elementum eu facilisis. Pretium quam vulputate dignissim suspendisse in est ante in. Vulputate odio ut enim blandit volutpat maecenas volutpat blandit aliquam. Nibh ipsum\index{ipsum} consequat nisl vel pretium lectus quam id leo.
+
+We provide \infref{inf:illustration}.
+
+\begin{infobox}[!htb]
+	\caption{Infobox related to \glsfirst{AMR} with short title}
+	\label{inf:illustration}
+	Etiam dignissim diam quis enim lobortis scelerisque fermentum dui. Aliquet porttitor lacus luctus accumsan tortor posuere ac. Eu nisl nunc mi ipsum\index{ipsum}. Cursus turpis massa tincidunt dui. Volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend. Dolor sit amet consectetur adipiscing elit. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Sit amet commodo nulla facilisi. Sed turpis tincidunt id aliquet. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Elementum pulvinar etiam non quam lacus suspendisse. Massa tincidunt nunc pulvinar sapien et. Velit sed ullamcorper morbi tincidunt.
+\end{infobox}
+
+\begin{table}
+	\caption{Table based on \figref{fig:illustration}}
+	\begin{center}
+		\begin{tabular}{rp{0.6\linewidth}}
+			\toprule
+			Left column & Right column \\
+			\midrule
+			Content & 
+			Faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper. Elementum facilisis leo vel fringilla est ullamcorper. Bibendum neque egestas congue quisque. Lectus proin nibh nisl condimentum id venenatis. Viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas. Proin gravida hendrerit lectus a. In dictum non consectetur a erat nam at lectus urna. Sit amet tellus cras adipiscing. Neque ornare aenean euismod elementum nisi. Consequat interdum varius sit amet mattis vulputate enim. \\
+			\bottomrule
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\subsection{Model formulation}
+
+\index{$\lambda$|see {lorem $\drsh$ ipsum}}
+
+Vitae nunc sed velit dignissim sodales ut eu. Aenean vel elit scelerisque mauris. Phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor. Scelerisque in dictum non consectetur a. Facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam. Adipiscing at in tellus integer feugiat scelerisque varius. Urna id volutpat lacus laoreet non curabitur gravida arcu. Aliquet sagittis id consectetur purus ut faucibus. Tincidunt ornare massa eget egestas purus viverra. Sem fringilla ut morbi tincidunt augue. Integer feugiat scelerisque varius morbi enim nunc.
+
+\begin{equation}
+	\lambda = l + \ldots
+\end{equation}
+
+\begin{equation}
+	\tag{showcase}
+	\lambda = l + a + \ldots
+\end{equation}
+
+Senectus et netus et malesuada fames ac turpis. Egestas maecenas pharetra convallis posuere morbi. Interdum consectetur libero id faucibus nisl tincidunt eget. Ante in nibh mauris cursus mattis molestie a iaculis at. Turpis massa tincidunt dui ut ornare lectus sit amet. Laoreet sit amet cursus sit amet dictum. At lectus urna duis convallis convallis tellus. Ut venenatis tellus in metus vulputate. Aliquam vestibulum morbi blandit cursus risus at ultrices mi. Elementum nisi quis eleifend quam adipiscing vitae proin sagittis nisl. Et odio pellentesque diam volutpat commodo sed egestas egestas. Interdum velit laoreet id donec ultrices tincidunt arcu non. Sed cras ornare arcu dui vivamus arcu felis bibendum ut. Ultricies tristique nulla aliquet enim tortor at auctor urna. In metus vulputate eu scelerisque felis imperdiet proin. Amet consectetur adipiscing elit ut aliquam purus sit amet. Id venenatis a condimentum vitae sapien pellentesque habitant morbi. Neque vitae tempus quam pellentesque nec nam aliquam sem. Id semper risus in hendrerit. Sagittis orci a scelerisque purus semper.
+
+\clearpage
+\chapter{Paper (included)}
+
+Morbi blandit cursus risus at ultrices mi tempus. Scelerisque varius morbi enim nunc faucibus a pellentesque sit. Fames ac turpis egestas maecenas pharetra convallis. Magna fermentum iaculis eu non. Convallis convallis tellus id interdum velit. At tempor commodo ullamcorper a lacus. Id aliquet lectus proin nibh nisl condimentum. Arcu non sodales neque sodales ut. Nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Amet volutpat consequat mauris nunc congue. Diam sollicitudin tempor id eu nisl nunc mi ipsum\index{ipsum} faucibus. Viverra tellus in hac habitasse platea. Adipiscing at in tellus integer feugiat. Risus viverra adipiscing at in. Nam aliquam sem et tortor consequat id porta nibh. Cum sociis natoque penatibus et magnis dis parturient montes. Tortor id aliquet lectus proin nibh nisl condimentum id venenatis. Phasellus egestas tellus rutrum tellus pellentesque.
+
+Neque egestas congue quisque egestas. Malesuada pellentesque elit eget gravida cum. Neque convallis a cras semper. Justo laoreet sit amet cursus sit amet dictum sit. Libero nunc consequat interdum varius sit amet mattis vulputate. Nisl nisi scelerisque eu ultrices. Egestas sed tempus urna et pharetra pharetra massa massa ultricies. Varius duis at consectetur lorem donec massa sapien faucibus et. Sed elementum tempus egestas sed sed risus. In est ante in nibh mauris cursus mattis. Dui accumsan sit amet nulla facilisi morbi tempus. Lobortis scelerisque fermentum dui faucibus in ornare.
+
+\setlength{\footskip}{80pt}
+%\includepdf[pagecommand={}, pages=-, width = 1.15\textwidth, offset = -0.5cm -0.5cm]{paperI.pdf}
+\includepdf[pages = -,
+pagecommand={%
+	\tikz[overlay, remember picture]{%
+		\path [-, draw=black, line width=2pt] 
+		($(current page.north west)+(25pt,-40pt)$) -|
+		($(current page.south east)+(-25pt,50pt)$) -| 
+		cycle;
+	}%
+},
+width = 1.15\textwidth, offset = -0.5cm -0.5cm
+]{paper.pdf}%
+\setlength{\footskip}{\defaultskip}
+% Frame source:
+%https://tex.stackexchange.com/a/618681
+
+\clearpage
+\chapter{Paper (censored)}
+
+Nulla aliquet porttitor lacus luctus accumsan tortor posuere ac. Placerat duis ultricies lacus sed turpis tincidunt id aliquet. Vulputate dignissim suspendisse in est ante. Pharetra massa massa ultricies mi quis hendrerit dolor magna. Tempus iaculis urna id volutpat lacus laoreet non. Interdum consectetur libero id faucibus nisl tincidunt eget. Non sodales neque sodales ut etiam sit amet. Vel eros donec ac odio tempor. Arcu dui vivamus arcu felis bibendum. Et netus et malesuada fames ac turpis egestas maecenas. Tortor pretium viverra suspendisse potenti. Amet est placerat in egestas erat imperdiet sed euismod. Semper viverra nam libero justo laoreet sit amet. Erat velit scelerisque in dictum non consectetur a. Ultrices vitae auctor eu augue. Lectus sit amet est placerat in. Morbi leo urna molestie at elementum eu facilisis sed. Cras fermentum odio eu feugiat pretium nibh ipsum\index{ipsum}. Vulputate ut pharetra sit amet aliquam id. Posuere lorem ipsum\index{ipsum} dolor sit amet.
+
+Faucibus purus in massa tempor nec feugiat. Eget aliquet nibh praesent tristique magna sit amet purus gravida. Enim sit amet venenatis urna cursus eget nunc. Condimentum lacinia quis vel eros donec. Felis eget nunc lobortis mattis aliquam. Tincidunt nunc pulvinar sapien et ligula ullamcorper. Tortor dignissim convallis aenean et. Quam id leo in vitae turpis massa sed elementum tempus. Vel facilisis volutpat est velit egestas dui id ornare arcu. Ac tincidunt vitae semper quis lectus nulla at volutpat. Adipiscing at in tellus integer feugiat. Ut tristique et egestas quis ipsum\index{ipsum} suspendisse ultrices gravida. Aliquet risus feugiat in ante metus dictum. Commodo odio aenean sed adipiscing. Facilisis magna etiam tempor orci eu lobortis elementum nibh tellus.
+
+Leo vel fringilla est ullamcorper eget nulla facilisi. Proin libero nunc consequat interdum varius sit amet mattis. Ut sem viverra aliquet eget sit amet. Aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant. Orci dapibus ultrices in iaculis nunc sed augue lacus viverra. Cras adipiscing enim eu turpis egestas pretium aenean pharetra. Auctor elit sed vulputate mi sit amet mauris. Duis ultricies lacus sed turpis tincidunt. Lacus viverra vitae congue eu consequat. Posuere morbi leo urna molestie at elementum eu. Amet facilisis magna etiam tempor orci eu. Nunc mattis enim ut tellus elementum sagittis. Vel orci porta non pulvinar neque laoreet suspendisse interdum. Vitae semper quis lectus nulla at volutpat diam ut venenatis. Volutpat diam ut venenatis tellus in metus vulputate eu scelerisque. Donec enim diam vulputate ut. Pellentesque nec nam aliquam sem et tortor. Facilisis gravida neque convallis a cras. Proin fermentum leo vel orci. Varius duis at consectetur lorem donec massa sapien.
+
+\setlength{\footskip}{80pt}
+%\includepdf[pagecommand={}, pages=-, width = 1.15\textwidth, offset = -0.5cm -0.5cm]{paperI.pdf}
+\includepdf[pages = -,
+pagecommand={%
+	\tikz[overlay, remember picture]{%
+		\path [-, draw=black, line width=2pt, fill=black]
+		($(current page.north west)+(25pt,-40pt)$) -|
+		($(current page.south east)+(-25pt,50pt)$) -| 
+		cycle;
+	}%
+},
+width = 1.15\textwidth, offset = -0.5cm -0.5cm
+]{paper.pdf}%
+\setlength{\footskip}{\defaultskip}
+% Frame source:
+%https://tex.stackexchange.com/a/618681
+
+\clearpage
+\chapter*{Acknowledgments}
+%\chaptermark{Acknowledgments}
+\markboth{Acknowledgments}{}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+\addcontentsline{lof}{chapter}{Acknowledgments}
+\addcontentsline{lot}{chapter}{Acknowledgments}
+
+Quis eleifend quam adipiscing vitae proin sagittis nisl. Euismod quis viverra nibh cras pulvinar mattis. Tortor posuere ac ut consequat semper viverra nam libero. A diam maecenas sed enim ut sem viverra. Nam aliquam sem et tortor consequat id. Integer feugiat scelerisque varius morbi enim nunc faucibus a pellentesque. Purus non enim praesent elementum facilisis leo. Arcu vitae elementum curabitur vitae nunc sed. Id consectetur purus ut faucibus pulvinar elementum integer enim neque. Diam in arcu cursus euismod.
+
+Elit at imperdiet dui accumsan sit. Risus commodo viverra maecenas accumsan lacus. Rutrum tellus pellentesque eu tincidunt tortor aliquam. Cursus risus at ultrices mi tempus imperdiet nulla malesuada. Justo eget magna fermentum iaculis eu non diam phasellus vestibulum. Neque volutpat ac tincidunt vitae semper quis lectus nulla. Amet luctus venenatis lectus magna fringilla. Et odio pellentesque diam volutpat commodo sed. Quam id leo in vitae. Adipiscing elit duis tristique sollicitudin.
+
+\backmatter
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\renewcommand\bibpreamble{Text added before the bibliography.
+
+\begin{center}
+	$\ast$~$\ast$~$\ast$
+\end{center}}
+
+\bibliography{refs.bib}
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}
